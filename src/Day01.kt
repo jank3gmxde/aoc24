@@ -1,21 +1,36 @@
+import kotlin.math.abs
+
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    fun part1(leftList: List<Int>, rightList: List<Int>): Int {
+        return leftList.sorted().zip(rightList.sorted()).sumOf { (left, right) ->
+            val diff = abs(left - right)
+            diff
+        }
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun part2(leftList: List<Int>, rightList: List<Int>): Int {
+        return leftList.sumOf { left ->
+            val count = rightList.count { it == left }
+            count * left
+        }
     }
-
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
 
     // Or read a large test input from the `src/Day01_test.txt` file:
     val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+    val (testLeftList, testRightList) = pair(testInput)
+    check(part1(testLeftList, testRightList) == 2378066)
+    check(part2(testLeftList, testRightList) == 18934359)
+
 
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+
+    val (leftList, rightList) = pair(input)
+    part1(leftList, rightList).println()
+    part2(leftList, rightList).println()
 }
+
+private fun pair(input: List<String>) = input.map { line ->
+    val parts = line.trim().split("\\s+".toRegex()) // Mehrfachleerzeichen behandeln
+    parts[0].toInt() to parts[1].toInt()
+}.unzip()
